@@ -12,11 +12,8 @@ class NoteRepository(
 ) {
     fun getNotes(): Flow<List<Note>> = flow {
         emit(localDataSource.notesFlow.first())
-
         val remoteNotes = remoteDataSource.fetchNotes()
-        remoteNotes.forEach { note ->
-            localDataSource.saveNote(note)
-        }
+        remoteNotes.forEach { localDataSource.saveNote(it) }
         emit(localDataSource.notesFlow.first())
     }
 
